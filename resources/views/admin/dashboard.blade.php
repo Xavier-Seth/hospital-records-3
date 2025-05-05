@@ -6,7 +6,8 @@
     <h1>Welcome to Admin Dashboard</h1>
     <p>You are logged in as Admin.</p>
 
-    <div class="row mt-5">
+    <!-- Total Widgets -->
+    <div class="row pb-5 mt-5">
 
         <div class="col-md-4">
             <div class="card text-white bg-primary mb-3">
@@ -35,5 +36,72 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Recent Doctors and Patients Tables -->
+    <div class="row pt-1 mt-5">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header bg-primary text-white">
+                    Recent Doctors
+                </div>
+                <div class="card-body p-0">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($recentDoctors as $doctor)
+                            <tr>
+                                <td>{{ $doctor->name }}</td>
+                                <td>{{ $doctor->email }}</td>
+                                <td>{{ $doctor->created_at->format('Y-m-d') }}</td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="3" class="text-center">No doctors found.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header bg-success text-white">
+                    Recent Patients
+                </div>
+                <div class="card-body p-0">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($recentPatients as $patient)
+                            <tr>
+                                <td>{{ $patient->name }}</td>
+                                <td>{{ $patient->email }}</td>
+                                <td>{{ $patient->created_at->format('Y-m-d') }}</td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="3" class="text-center">No patients found.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
