@@ -58,11 +58,11 @@ Route::middleware(['auth', 'role:patient'])->get('/patient/dashboard', [PatientD
 // Dummy Admin Management Routes
 
 Route::middleware(['auth', 'role:admin'])->get('/admin/manage-doctors', function () {
-    return view('admin.doctors_page');
+    return view('admin.manage_doctors.doctors_page');
 })->name('admin.manage_doctors.index');
 
 Route::middleware(['auth', 'role:admin'])->get('/admin/manage-patients', function () {
-    return view('admin.patients_page');
+    return view('admin.manage_patients.patients_page');
 })->name('admin.manage_patients.index');
 
 Route::middleware(['auth', 'role:admin'])->get('/admin/manage-appointments', function () {
@@ -70,7 +70,7 @@ Route::middleware(['auth', 'role:admin'])->get('/admin/manage-appointments', fun
 })->name('admin.manage_appointments.index');
 
 Route::middleware(['auth', 'role:admin'])->get('/admin/user-management', function () {
-    return view('admin.user_page');
+    return view('admin.manage_users.user_page');
 })->name('admin.user_management.index');
 
 
