@@ -1,2 +1,3 @@
 admin dashboard fix
 admin dashboard tables
+admin manage doctors
