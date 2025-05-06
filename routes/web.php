@@ -5,121 +5,90 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\DoctorDashboardController;
 use App\Http\Controllers\PatientDashboardController;
+use App\Http\Controllers\Admin\ManageDoctorController;
 
-
+// Login and Home Redirect
 Route::get('/', function () {
     return view('auth.login');
 });
 
-// Login Form
+// Authentication Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-
-// Login Submit
 Route::post('/login', [LoginController::class, 'login']);
-
-// Logout
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+// DASHBOARDS
 
-
-// Login Routes
-// Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', function () {
-//     return view('dashboard.admin');
-// })->name('admin.dashboard');
-
-// Route::middleware(['auth', 'role:doctor'])->get('/doctor/dashboard', function () {
-//     return view('dashboard.doctor');
-// })->name('doctor.dashboard');
-
-// Route::middleware(['auth', 'role:patient'])->get('/patient/dashboard', function () {
-//     return view('dashboard.patient');
-// })->name('patient.dashboard');
-
-
-// Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', function () {
-//     return view('admin.dashboard');
-// })->name('admin.dashboard');
-
-
+// Admin Dashboard
 Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
+// Doctor Dashboard
 Route::middleware(['auth', 'role:doctor'])->get('/doctor/dashboard', [DoctorDashboardController::class, 'index'])->name('doctor.dashboard');
+
+// Patient Dashboard
 Route::middleware(['auth', 'role:patient'])->get('/patient/dashboard', [PatientDashboardController::class, 'index'])->name('patient.dashboard');
 
+// ================================
+// ADMIN ROUTES
+// ================================
 
-// Route::middleware(['auth', 'role:admin'])->group(function () {
-//     Route::get('/admin/dashboard', 'AdminController@dashboard');
-// });
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
 
-
-//Admin Page Routes
-// Route::get('/admin/dashboard', function () {
-//     return view('admin.dashboard');
-// })->name('admin.dashboard');
-// Dummy Admin Management Routes
-
-Route::middleware(['auth', 'role:admin'])->get('/admin/manage-doctors', function () {
-    return view('admin.manage_doctors.doctors_page');
-})->name('admin.manage_doctors.index');
-
-Route::middleware(['auth', 'role:admin'])->get('/admin/manage-patients', function () {
-    return view('admin.manage_patients.patients_page');
-})->name('admin.manage_patients.index');
-
-Route::middleware(['auth', 'role:admin'])->get('/admin/manage-appointments', function () {
-    return view('admin.appointments');
-})->name('admin.manage_appointments.index');
-
-Route::middleware(['auth', 'role:admin'])->get('/admin/user-management', function () {
-    return view('admin.manage_users.user_page');
-})->name('admin.user_management.index');
-
-
-//////////////////////////////////////////////////////////
-// Route::get('/admin/doctors_page', function () {
-//     return view('admin.doctors_page');
-// })->name('admin.doctors_page');
-
-// Route::get('/admin/patients_page', function () {
-//     return view('admin.patients_page');
-// })->name('admin.patients_page');
-
-// Route::get('/admin/appointments', function () {
-//     return view('admin.appointments');
-// })->name('admin.appointments');
-
-// Route::get('/admin/user_page', function () {
-//     return view('admin.user_page');
-// })->name('admin.user_page');
-
-
-
-// DOCTOR ROUTES
-Route::middleware(['auth', 'role:doctor'])->prefix('doctor')->group(function () {
-
-    // Dashboard
-    Route::get('/dashboard', [DoctorDashboardController::class, 'index'])->name('doctor.dashboard');
+    // Manage Doctors
+    Route::prefix('manage-doctors')->name('manage_doctors.')->group(function () {
+        Route::get('/', [ManageDoctorController::class, 'index'])->name('index');
+        Route::get('/create', [ManageDoctorController::class, 'create'])->name('create');
+        Route::post('/', [ManageDoctorController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [ManageDoctorController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [ManageDoctorController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ManageDoctorController::class, 'destroy'])->name('destroy');
+    });
 
     // Manage Patients
-    Route::get('/patients', function () {
-        return view('doctor/patients_page');
-    })->name('doctor.patients');
+    Route::get('/manage-patients', function () {
+        return view('admin.manage_patients.patients_page');
+    })->name('manage_patients.index');
 
-    // Appointments
+    // Manage Appointments
+    Route::get('/manage-appointments', function () {
+        return view('admin.appointments');
+    })->name('manage_appointments.index');
+
+    // User Management
+    Route::get('/user-management', function () {
+        return view('admin.manage_users.user_page');
+    })->name('user_management.index');
+});
+
+// ================================
+// DOCTOR ROUTES
+// ================================
+
+Route::middleware(['auth', 'role:doctor'])->prefix('doctor')->name('doctor.')->group(function () {
+
+    Route::get('/dashboard', [DoctorDashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/patients', function () {
+        return view('doctor.patients_page');
+    })->name('patients');
+
     Route::get('/appointments', function () {
         return view('doctor.appointments');
-    })->name('doctor.appointments');
+    })->name('appointments');
 });
 
+// ================================
 // PATIENT ROUTES
-Route::middleware(['auth', 'role:patient'])->prefix('patient')->group(function () {
+// ================================
 
-    // Dashboard
-    Route::get('/dashboard', [PatientDashboardController::class, 'index'])->name('patient.dashboard');
+Route::middleware(['auth', 'role:patient'])->prefix('patient')->name('patient.')->group(function () {
 
-    // Appointments
+    Route::get('/dashboard', [PatientDashboardController::class, 'index'])->name('dashboard');
+
     Route::get('/appointments', function () {
         return view('patient.appointments');
-    })->name('patient.appointments');
-
+    })->name('appointments');
 });
 
+// Route::get('/manage-doctors', [ManageDoctorController::class, 'index'])->name('admin.manage_doctors.index');
+Route::get('/admin/manage-doctors/{id}', [ManageDoctorController::class, 'show'])->name('admin.manage_doctors.show');
