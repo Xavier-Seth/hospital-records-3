@@ -6,6 +6,9 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\DoctorDashboardController;
 use App\Http\Controllers\PatientDashboardController;
 use App\Http\Controllers\Admin\ManageDoctorController;
+// use App\Http\Controllers\Admin\PatientController;
+use App\Http\Controllers\Admin\PatientController;
+
 
 // Login and Home Redirect
 Route::get('/', function () {
@@ -92,3 +95,9 @@ Route::middleware(['auth', 'role:patient'])->prefix('patient')->name('patient.')
 
 // Route::get('/manage-doctors', [ManageDoctorController::class, 'index'])->name('admin.manage_doctors.index');
 Route::get('/admin/manage-doctors/{id}', [ManageDoctorController::class, 'show'])->name('admin.manage_doctors.show');
+
+
+//admin patient
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
+    Route::resource('manage_patients', PatientController::class);
+});

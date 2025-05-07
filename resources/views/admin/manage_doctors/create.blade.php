@@ -3,7 +3,7 @@
 @section('title', 'Add Doctor')
 
 @section('content')
-<h1>Add Doctor</h1>
+<h1>Add New Doctor</h1>
 
 @if ($errors->any())
     <div class="alert alert-danger">
@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-md-3">
                     <label>Date of Birth</label>
-                    <input type="date" name="date_of_birth" class="form-control" value="{{ old('date_of_birth') }}">
+                    <input type="date" name="date_of_birth" class="form-control" value="{{ old('date_of_birth') }}" required>
                 </div>
                 <div class="col-md-3">
                     <label>Phone</label>
@@ -67,36 +67,32 @@
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label>Address</label>
-                <input type="text" name="address" class="form-control" value="{{ old('address') }}">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label>Confirm Password</label>
+                    <input type="password" name="password_confirmation" class="form-control" required>
+                </div>
             </div>
 
-            <h5 class="mt-4">Professional Information</h5>
+            <h5 class="mt-5">Professional Information</h5>
 
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <label>Specialties</label>
-                    <select name="specialties[]" class="form-control" multiple>
-                        <option>Pediatrics</option>
-                        <option>Cardiology</option>
-                        <option>Neurology</option>
-                    </select>
+                    <label>Specialties (comma separated)</label>
+                    <input type="text" name="specialties" class="form-control" value="{{ old('specialties') }}">
                 </div>
-
                 <div class="col-md-3">
-                    <label>Subspecialties</label>
-                    <select name="subspecialties[]" class="form-control" multiple>
-                        <option>Pediatric Neurology</option>
-                        <option>Cardiac Surgery</option>
-                    </select>
+                    <label>Subspecialties (comma separated)</label>
+                    <input type="text" name="subspecialties" class="form-control" value="{{ old('subspecialties') }}">
                 </div>
-
                 <div class="col-md-3">
                     <label>License Number</label>
                     <input type="text" name="license_number" class="form-control" value="{{ old('license_number') }}">
                 </div>
-
                 <div class="col-md-3">
                     <label>PRC Number</label>
                     <input type="text" name="prc_number" class="form-control" value="{{ old('prc_number') }}">
@@ -105,33 +101,26 @@
 
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label>License Expiry Date</label>
+                    <label>License Expiry</label>
                     <input type="date" name="license_expiry" class="form-control" value="{{ old('license_expiry') }}">
                 </div>
-
                 <div class="col-md-6">
                     <label>Years of Experience</label>
                     <input type="number" name="years_experience" class="form-control" value="{{ old('years_experience') }}">
                 </div>
             </div>
 
-            <h5 class="mt-4">Hospital Information</h5>
+            <h5 class="mt-5">Hospital Information</h5>
 
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <label>Department Assigned</label>
-                    <select name="department" class="form-control">
-                        <option>Surgery</option>
-                        <option>Pediatrics</option>
-                        <option>Emergency</option>
-                    </select>
+                    <label>Department</label>
+                    <input type="text" name="department" class="form-control" value="{{ old('department') }}">
                 </div>
-
                 <div class="col-md-4">
                     <label>Position / Title</label>
                     <input type="text" name="position" class="form-control" value="{{ old('position') }}">
                 </div>
-
                 <div class="col-md-4">
                     <label>Doctor ID</label>
                     <input type="text" name="doctor_id" class="form-control" value="{{ old('doctor_id') }}" required>
@@ -140,40 +129,29 @@
 
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <label>Days Available</label>
-                    <select name="days_available[]" class="form-control" multiple>
-                        @foreach(['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'] as $day)
-                            <option>{{ $day }}</option>
-                        @endforeach
-                    </select>
+                    <label>Days Available (comma separated)</label>
+                    <input type="text" name="days_available" class="form-control" value="{{ old('days_available') }}">
                 </div>
-
                 <div class="col-md-4">
-                    <label>Time Slots</label>
-                    <select name="time_slots[]" class="form-control" multiple>
-                        <option>Morning</option>
-                        <option>Afternoon</option>
-                        <option>Night</option>
-                    </select>
+                    <label>Time Slots (comma separated)</label>
+                    <input type="text" name="time_slots" class="form-control" value="{{ old('time_slots') }}">
                 </div>
-
                 <div class="col-md-4">
                     <label>On Call Availability</label>
                     <select name="on_call" class="form-control">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
+                        <option value="0" {{ old('on_call') == '0' ? 'selected' : '' }}>No</option>
+                        <option value="1" {{ old('on_call') == '1' ? 'selected' : '' }}>Yes</option>
                     </select>
                 </div>
             </div>
 
-            <h5 class="mt-4">System / Administrative</h5>
+            <h5 class="mt-5">System / Administrative</h5>
 
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label>Patients Handled</label>
                     <input type="number" name="patients_handled" class="form-control" value="{{ old('patients_handled') }}">
                 </div>
-
                 <div class="col-md-6">
                     <label>Status</label>
                     <select name="status" class="form-control">
@@ -185,12 +163,15 @@
                 </div>
             </div>
 
+            <h5>Address</h5>
+
             <div class="mb-3">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control" required>
+                <label>Address</label>
+                <input type="text" name="address" class="form-control" value="{{ old('address') }}">
             </div>
 
             <button type="submit" class="btn btn-primary">Save Doctor</button>
+
         </form>
 
     </div>

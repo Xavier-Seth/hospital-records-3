@@ -35,11 +35,15 @@
                         <td>{{ $doctor->email }}</td>
                         <td>
                             @if($doctor->specialties)
-                                {{ implode(', ', json_decode($doctor->specialties)) }}
+                                @php
+                                    $specialties = is_array(json_decode($doctor->specialties, true)) ? json_decode($doctor->specialties, true) : explode(',', $doctor->specialties);
+                                @endphp
+                                {{ implode(', ', array_map('trim', $specialties)) }}
                             @else
                                 N/A
                             @endif
                         </td>
+                        
                         <td>
                             <span class="badge 
                                 @if($doctor->status == 'Active') bg-success 
