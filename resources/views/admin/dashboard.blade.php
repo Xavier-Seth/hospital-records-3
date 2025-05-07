@@ -3,11 +3,12 @@
 @section('title', 'Admin Dashboard')
 
 @section('content')
+<div class="container">
     <h1>Welcome to Admin Dashboard</h1>
     <p>You are logged in as Admin.</p>
 
     <!-- Total Widgets -->
-    <div class="row pb-5 mt-5">
+    <div class="row pb-4 mt-5">
 
         <div class="col-md-4">
             <div class="card text-white bg-primary mb-3">
@@ -39,15 +40,17 @@
     </div>
 
     <!-- Recent Doctors and Patients Tables -->
-    <div class="row pt-1 mt-5">
+    <div class="row  mt-1">
+
+        <!-- Recent Doctors Table -->
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header bg-primary text-white">
                     Recent Doctors
                 </div>
-                <div class="card-body p-0">
+                <div class="card-body p-0" style="max-height: 400px; overflow-y: auto; scrollbar-gutter: stable;">
                     <table class="table mb-0">
-                        <thead>
+                        <thead style="position: sticky; top: 0; background-color: #f8f9fa;">
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
@@ -72,14 +75,16 @@
             </div>
         </div>
 
+        <!-- Recent Patients Table -->
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header bg-success text-white">
                     Recent Patients
                 </div>
-                <div class="card-body p-0">
+                <div class="card-body p-0" style="max-height: 400px; overflow-y: auto; scrollbar-gutter: stable;">
+
                     <table class="table mb-0">
-                        <thead>
+                        <thead style="position: sticky; top: 0; background-color: #f8f9fa;">
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
@@ -103,5 +108,7 @@
                 </div>
             </div>
         </div>
+
     </div>
+</div>
 @endsection

@@ -59,3 +59,7 @@ body {
     margin-left: 300px;
     padding: 20px;
 }
+
+overflow-y: auto;
+max-height: 400px;
+scrollbar-gutter: stable;

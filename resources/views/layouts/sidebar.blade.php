@@ -27,12 +27,12 @@
         @if(auth()->user()->role === 'admin' || auth()->user()->role === 'doctor')
         <a class="nav-link 
             @if(auth()->user()->role === 'admin' && request()->routeIs('admin.manage_patients.index')) active 
-            @elseif(auth()->user()->role === 'doctor' && request()->routeIs('doctor.patients')) active 
+            @elseif(auth()->user()->role === 'doctor' && request()->routeIs('doctor.patients.index')) active 
             @endif" 
            href="@if(auth()->user()->role === 'admin')
                     {{ route('admin.manage_patients.index') }}
                 @elseif(auth()->user()->role === 'doctor')
-                    {{ route('doctor.patients') }}
+                    {{ route('doctor.patients.index') }}
                 @endif">
             <i class="bi bi-person-lines-fill"></i> Manage Patients
         </a>
@@ -42,26 +42,28 @@
         @if(in_array(auth()->user()->role, ['admin', 'doctor', 'patient']))
         <a class="nav-link 
             @if(auth()->user()->role === 'admin' && request()->routeIs('admin.manage_appointments.index')) active 
-            @elseif(auth()->user()->role === 'doctor' && request()->routeIs('doctor.appointments')) active 
+            @elseif(auth()->user()->role === 'doctor' && request()->routeIs('doctor.appointments.index')) active 
             @elseif(auth()->user()->role === 'patient' && request()->routeIs('patient.appointments')) active 
             @endif" 
            href="@if(auth()->user()->role === 'admin')
                     {{ route('admin.manage_appointments.index') }}
                 @elseif(auth()->user()->role === 'doctor')
-                    {{ route('doctor.appointments') }}
+                    {{ route('doctor.appointments.index') }}
                 @elseif(auth()->user()->role === 'patient')
-                    {{ route('patient.appointments') }}
+                    {{ route('patient.appointments.index') }}
                 @endif">
             <i class="bi bi-calendar-event"></i> Appointments
         </a>
         @endif
 
         <!-- User Management (Admin only) -->
+        {{-- 
         @if(auth()->user()->role === 'admin')
         <a class="nav-link {{ request()->routeIs('admin.user_management.index') ? 'active' : '' }}" href="{{ route('admin.user_management.index') }}">
             <i class="bi bi-people"></i> User Management
         </a>
-        @endif
+        @endif 
+        --}}
 
     </nav>
 
