@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 use App\Models\User;
-use App\Models\Patient;
 
 class AppointmentController extends Controller
 {
@@ -22,9 +21,8 @@ class AppointmentController extends Controller
     // Show the form for creating a new appointment
     public function create()
     {
-        // Load doctors and patients
         $doctors = User::where('role', 'doctor')->orderBy('name')->get();
-        $patients = Patient::orderBy('first_name')->get();
+        $patients = User::where('role', 'patient')->orderBy('name')->get(); // FIXED
 
         return view('appointments.create', compact('doctors', 'patients'));
     }
@@ -32,16 +30,14 @@ class AppointmentController extends Controller
     // Store a newly created appointment in storage
     public function store(Request $request)
     {
-        // Validate request
         $request->validate([
             'doctor_id' => 'required|exists:users,id',
-            'patient_id' => 'required|exists:patients,id',
+            'patient_id' => 'required|exists:users,id', // FIXED
             'date' => 'required|date',
             'time' => 'required',
             'status' => 'required|string',
         ]);
 
-        // Create appointment
         Appointment::create([
             'doctor_id' => $request->doctor_id,
             'patient_id' => $request->patient_id,
@@ -50,9 +46,8 @@ class AppointmentController extends Controller
             'status' => $request->status,
         ]);
 
-        // Redirect based on role
         return redirect()->route(auth()->user()->role === 'admin' ? 'admin.manage_appointments.index' : 'doctor.appointments.index')
-                         ->with('success', 'Appointment created successfully!');
+            ->with('success', 'Appointment created successfully!');
     }
 
     // Show the form for editing the specified appointment
@@ -60,7 +55,7 @@ class AppointmentController extends Controller
     {
         $appointment = Appointment::findOrFail($id);
         $doctors = User::where('role', 'doctor')->orderBy('name')->get();
-        $patients = Patient::orderBy('first_name')->get();
+        $patients = User::where('role', 'patient')->orderBy('name')->get(); // FIXED
 
         return view('appointments.edit', compact('appointment', 'doctors', 'patients'));
     }
@@ -68,16 +63,14 @@ class AppointmentController extends Controller
     // Update the specified appointment in storage
     public function update(Request $request, $id)
     {
-        // Validate request
         $request->validate([
             'doctor_id' => 'required|exists:users,id',
-            'patient_id' => 'required|exists:patients,id',
+            'patient_id' => 'required|exists:users,id', // FIXED
             'date' => 'required|date',
             'time' => 'required',
             'status' => 'required|string',
         ]);
 
-        // Update appointment
         $appointment = Appointment::findOrFail($id);
         $appointment->update([
             'doctor_id' => $request->doctor_id,
@@ -87,9 +80,8 @@ class AppointmentController extends Controller
             'status' => $request->status,
         ]);
 
-        // Redirect based on role
         return redirect()->route(auth()->user()->role === 'admin' ? 'admin.manage_appointments.index' : 'doctor.appointments.index')
-                         ->with('success', 'Appointment updated successfully!');
+            ->with('success', 'Appointment updated successfully!');
     }
 
     // Remove the specified appointment from storage
@@ -98,8 +90,7 @@ class AppointmentController extends Controller
         $appointment = Appointment::findOrFail($id);
         $appointment->delete();
 
-        // Redirect based on role
         return redirect()->route(auth()->user()->role === 'admin' ? 'admin.manage_appointments.index' : 'doctor.appointments.index')
-                         ->with('success', 'Appointment deleted successfully!');
+            ->with('success', 'Appointment deleted successfully!');
     }
 }

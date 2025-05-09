@@ -16,7 +16,7 @@ class User extends Authenticatable
         'password',
         'role',
 
-        // Add all your doctor info fields here too ↓↓↓
+        // Doctor info fields
         'first_name',
         'middle_name',
         'last_name',
@@ -50,15 +50,26 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
 
-        // THIS IS WHERE YOU PASTE IT
+        // Cast arrays properly
         'specialties' => 'array',
         'subspecialties' => 'array',
         'days_available' => 'array',
         'time_slots' => 'array',
     ];
 
+    /**
+     * Check the user's role.
+     */
     public function hasRole(string $role): bool
     {
         return $this->role === $role;
+    }
+
+    /**
+     * Relationship: User has many appointments (if doctor)
+     */
+    public function appointments()
+    {
+        return $this->hasMany(\App\Models\Appointment::class, 'doctor_id');
     }
 }

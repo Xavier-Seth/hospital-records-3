@@ -33,28 +33,20 @@ class ManageDoctorController extends Controller
 
         $data = $request->all();
 
-        // Handle photo upload
         if ($request->hasFile('photo')) {
             $path = $request->file('photo')->store('doctors', 'public');
             $data['photo'] = $path;
         }
 
-        // JSON encode array fields
         $data['specialties'] = $request->specialties ? json_encode($request->specialties) : null;
         $data['subspecialties'] = $request->subspecialties ? json_encode($request->subspecialties) : null;
         $data['days_available'] = $request->days_available ? json_encode($request->days_available) : null;
         $data['time_slots'] = $request->time_slots ? json_encode($request->time_slots) : null;
 
-        // Password hash
         $data['password'] = Hash::make($request->password);
-
-        // Role
         $data['role'] = 'doctor';
-
-        // Set full name
         $data['name'] = trim($request->first_name . ' ' . $request->middle_name . ' ' . $request->last_name);
 
-        // Create doctor
         User::create($data);
 
         return redirect()->route('admin.manage_doctors.index')->with('success', 'Doctor added successfully!');
@@ -67,11 +59,10 @@ class ManageDoctorController extends Controller
     }
 
     public function show($id)
-{
-    $doctor = User::findOrFail($id);
-
-    return view('admin.manage_doctors.show', compact('doctor'));
-}
+    {
+        $doctor = User::findOrFail($id);
+        return view('admin.manage_doctors.show', compact('doctor'));
+    }
 
     public function update(Request $request, $id)
     {
@@ -86,9 +77,7 @@ class ManageDoctorController extends Controller
 
         $data = $request->all();
 
-        // Handle photo upload
         if ($request->hasFile('photo')) {
-            // Delete old photo if exists
             if ($doctor->photo && Storage::disk('public')->exists($doctor->photo)) {
                 Storage::disk('public')->delete($doctor->photo);
             }
@@ -99,16 +88,12 @@ class ManageDoctorController extends Controller
             unset($data['photo']);
         }
 
-        // JSON encode array fields
         $data['specialties'] = $request->specialties ? json_encode($request->specialties) : null;
         $data['subspecialties'] = $request->subspecialties ? json_encode($request->subspecialties) : null;
         $data['days_available'] = $request->days_available ? json_encode($request->days_available) : null;
         $data['time_slots'] = $request->time_slots ? json_encode($request->time_slots) : null;
-
-        // Update full name
         $data['name'] = trim($request->first_name . ' ' . $request->middle_name . ' ' . $request->last_name);
 
-        // Update doctor
         $doctor->update($data);
 
         return redirect()->route('admin.manage_doctors.index')->with('success', 'Doctor updated successfully!');
@@ -116,7 +101,13 @@ class ManageDoctorController extends Controller
 
     public function destroy($id)
     {
-        $doctor = User::findOrFail($id);
+        $doctor = User::where('role', 'doctor')->findOrFail($id);
+
+        // Restrict deletion if doctor has appointments
+        if ($doctor->appointments()->exists()) {
+            return redirect()->route('admin.manage_doctors.index')
+                ->with('error', 'Cannot delete doctor with existing appointments. Please reassign or delete the appointments first.');
+        }
 
         // Delete photo if exists
         if ($doctor->photo && Storage::disk('public')->exists($doctor->photo)) {
