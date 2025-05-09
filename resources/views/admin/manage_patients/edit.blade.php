@@ -15,14 +15,13 @@
     </div>
 @endif
 
-<!-- Scrollable container -->
-<div class="card" style="max-height: 600px; overflow-y: auto;">
-    <div class="card-body">
+<div class="card" style="height: 85vh; display: flex; flex-direction: column;">
+    <form action="{{ route('admin.manage_patients.update', $patient->id) }}" method="POST" enctype="multipart/form-data" style="display: contents;">
+        @csrf
+        @method('PUT')
 
-        <form action="{{ route('admin.manage_patients.update', $patient->id) }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
-
+        <div class="card-body overflow-auto px-4">
+            {{-- Personal Info --}}
             <h5>Personal Information</h5>
 
             <div class="mb-3">
@@ -98,6 +97,7 @@
                 </div>
             </div>
 
+            {{-- Contact & Emergency Info --}}
             <h5 class="mt-4">Contact & Emergency Info</h5>
 
             <div class="row mb-3">
@@ -136,6 +136,7 @@
                 <input type="text" name="emergency_contact_address" class="form-control" value="{{ old('emergency_contact_address', $patient->emergency_contact_address) }}">
             </div>
 
+            {{-- Medical Info --}}
             <h5 class="mt-4">Medical Information</h5>
 
             <div class="mb-3">
@@ -163,6 +164,7 @@
                 <textarea name="past_surgeries" class="form-control">{{ old('past_surgeries', $patient->past_surgeries) }}</textarea>
             </div>
 
+            {{-- Hospital Info --}}
             <h5 class="mt-4">Hospitalization</h5>
 
             <div class="row mb-3">
@@ -203,16 +205,17 @@
                 </div>
             </div>
 
+            {{-- Notes --}}
             <h5 class="mt-4">Notes</h5>
-
             <div class="mb-3">
                 <label>Additional Notes</label>
                 <textarea name="notes" class="form-control">{{ old('notes', $patient->notes) }}</textarea>
             </div>
+        </div>
 
+        <div class="card-footer text-end py-3 px-4 bg-white border-top">
             <button type="submit" class="btn btn-primary">Update Patient</button>
-        </form>
-
-    </div>
+        </div>
+    </form>
 </div>
 @endsection

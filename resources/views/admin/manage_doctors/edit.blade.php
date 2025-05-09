@@ -15,21 +15,21 @@
     </div>
 @endif
 
-<div class="card" style="max-height: 600px; overflow-y: auto;">
-    <div class="card-body">
+{{-- Scrollable layout with pinned submit button --}}
+<div class="card" style="height: 85vh; display: flex; flex-direction: column;">
+    <form action="{{ route('admin.manage_doctors.update', $doctor->id) }}" method="POST" enctype="multipart/form-data" style="display: contents;">
+        @csrf
+        @method('PUT')
 
-        <form action="{{ route('admin.manage_doctors.update', $doctor->id) }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
-
+        <div class="card-body overflow-auto px-4">
             <h5>Personal Information</h5>
 
             <div class="mb-3">
                 <label>Photo</label>
                 @if ($doctor->photo)
-                    <br><img src="{{ asset('storage/'.$doctor->photo) }}" width="100">
+                    <br><img src="{{ asset('storage/'.$doctor->photo) }}" width="100" class="rounded shadow mb-2">
                 @endif
-                <input type="file" name="photo" class="form-control mt-2">
+                <input type="file" name="photo" class="form-control">
             </div>
 
             <div class="row mb-3">
@@ -168,12 +168,12 @@
                 <label>Address</label>
                 <input type="text" name="address" class="form-control" value="{{ old('address', $doctor->address) }}">
             </div>
+        </div>
 
+        {{-- Fixed footer with submit button --}}
+        <div class="card-footer text-end py-3 px-4 bg-white border-top">
             <button type="submit" class="btn btn-primary">Update Doctor</button>
-
-        </form>
-
-    </div>
+        </div>
+    </form>
 </div>
-
 @endsection
